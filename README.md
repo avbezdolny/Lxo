@@ -1,3 +1,5 @@
+![logo](logo.png)
+
 # Tic-tac-toe of the new generation
 
 There is a small 3x3 field in each cell of the usual 3x3 playing field. You put a tic-tac-toe in a small field. When you line up three of your pieces in a row on a small field, you win on it. To win the game, you need to win on three small fields in a row. Which of the nine small fields to play on is determined by the opponent's previous move. If the field is already occupied, then choose any available one.
