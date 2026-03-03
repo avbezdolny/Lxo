@@ -6,8 +6,8 @@ local s = require("say")
 local color_bg = {238/255, 236/255, 237/255}  -- #eeeced
 local color_fg = {98/255, 114/255, 122/255}  -- #62727a
 local color_empty_cell = {98/255, 114/255, 122/255, 0.25}  -- #62727a
-local color_select_cell = {75/255, 211/255, 123/255, 0.25}  -- #4bd37b
-local color_press_cell = {255/255, 221/255, 103/255, 0.25}  -- #ffdd67
+local color_select_cell = {75/255, 211/255, 123/255, 0.5}  -- #4bd37b
+local color_press_cell = {255/255, 221/255, 103/255, 1}  -- #ffdd67
 
 -- images
 local image_paper = love.graphics.newImage("images/paper.png")
@@ -131,20 +131,20 @@ local function resize()
 
     grid = {
         {
-            board.x + cell_size * 3 + offset * 2.5, board.y,
-            board.x + cell_size * 3 + offset * 2.5, board.y + board.size
+            board.x + cell_size * 3 + offset * 2.5, board.y + offset,
+            board.x + cell_size * 3 + offset * 2.5, board.y + board.size - offset
         },
         {
-            board.x + cell_size * 6 + offset * 5.5, board.y,
-            board.x + cell_size * 6 + offset * 5.5, board.y + board.size
+            board.x + cell_size * 6 + offset * 5.5, board.y + offset,
+            board.x + cell_size * 6 + offset * 5.5, board.y + board.size - offset
         },
         {
-            board.x, board.y + cell_size * 3 + offset * 2.5,
-            board.x + board.size, board.y + cell_size * 3 + offset * 2.5
+            board.x + offset, board.y + cell_size * 3 + offset * 2.5,
+            board.x + board.size - offset, board.y + cell_size * 3 + offset * 2.5
         },
         {
-            board.x, board.y + cell_size * 6 + offset * 5.5,
-            board.x + board.size, board.y + cell_size * 6 + offset * 5.5
+            board.x + offset, board.y + cell_size * 6 + offset * 5.5,
+            board.x + board.size - offset, board.y + cell_size * 6 + offset * 5.5
         }
     }
 
@@ -804,17 +804,17 @@ function love.draw()
         love.graphics.draw(image_button, coord.exit.x, coord.exit.y, 0, k_scale * 2, k_scale * 2)
 
         love.graphics.setColor(1, 1, 1, 1)
-        love.graphics.draw(image_bot, coord.bot.x + cell_size * 0.2, coord.bot.y, 0, k_scale * 2, k_scale * 2)
-        love.graphics.draw(image_human, coord.human.x + cell_size * 0.2, coord.human.y, 0, k_scale * 2, k_scale * 2)
-        love.graphics.draw(image_about, coord.about.x + cell_size * 0.2, coord.about.y, 0, k_scale * 2, k_scale * 2)
-        love.graphics.draw(image_exit, coord.exit.x + cell_size * 0.2, coord.exit.y, 0, k_scale * 2, k_scale * 2)
+        love.graphics.draw(image_bot, coord.bot.x + cell_size * 0.25, coord.bot.y, 0, k_scale * 2, k_scale * 2)
+        love.graphics.draw(image_human, coord.human.x + cell_size * 0.25, coord.human.y, 0, k_scale * 2, k_scale * 2)
+        love.graphics.draw(image_about, coord.about.x + cell_size * 0.25, coord.about.y, 0, k_scale * 2, k_scale * 2)
+        love.graphics.draw(image_exit, coord.exit.x + cell_size * 0.25, coord.exit.y, 0, k_scale * 2, k_scale * 2)
 
         love.graphics.setColor(color_fg)
         love.graphics.setFont(game_font)
-        love.graphics.printf(s("Game vs Bot"), coord.bot.x + cell_size, coord.bot.y + cell_size * 0.375, cell_size * 8.6, "center")
-        love.graphics.printf(s("Game vs Human"), coord.human.x + cell_size, coord.human.y + cell_size * 0.375, cell_size * 8.6, "center")
-        love.graphics.printf(s("About game"), coord.about.x + cell_size, coord.about.y + cell_size * 0.375, cell_size * 8.6, "center")
-        love.graphics.printf(s("Exit game"), coord.exit.x + cell_size, coord.exit.y + cell_size * 0.375, cell_size * 8.6, "center")
+        love.graphics.printf(s("Game vs Bot"), coord.bot.x + cell_size, coord.bot.y + cell_size * 0.5, cell_size * 8.5, "center")
+        love.graphics.printf(s("Game vs Human"), coord.human.x + cell_size, coord.human.y + cell_size * 0.5, cell_size * 8.5, "center")
+        love.graphics.printf(s("About game"), coord.about.x + cell_size, coord.about.y + cell_size * 0.5, cell_size * 8.5, "center")
+        love.graphics.printf(s("Exit game"), coord.exit.x + cell_size, coord.exit.y + cell_size * 0.5, cell_size * 8.5, "center")
 
         if press_button == "anim" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
         if is_anim then love.graphics.draw(image_move, coord.p1.x, coord.p1.y, 0, k_scale * 2, k_scale * 2)
