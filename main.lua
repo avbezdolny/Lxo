@@ -4,10 +4,11 @@ local s = require("say")
 
 -- colors
 local color_bg = {238/255, 236/255, 237/255}  -- #eeeced
-local color_fg = {98/255, 114/255, 122/255}  -- #62727a
-local color_empty_cell = {98/255, 114/255, 122/255, 0.25}  -- #62727a
-local color_select_cell = {75/255, 211/255, 123/255, 0.5}  -- #4bd37b
-local color_press_cell = {255/255, 221/255, 103/255, 1}  -- #ffdd67
+local color_fg = {63/255, 63/255, 63/255}  -- #3f3f3f
+local color_button_press = {155/255, 155/255, 154/255}  -- #9b9b9a
+local color_empty_cell = {155/255, 155/255, 154/255, 0.25}  -- #9b9b9a
+local color_select_cell = {177/255, 204/255, 51/255, 0.5}  -- #4bd37b
+local color_press_cell = {252/255, 234/255, 43/255, 0.75}  -- #ffdd67
 
 -- images
 local image_paper = love.graphics.newImage("images/paper.png")
@@ -18,16 +19,17 @@ local image_x = love.graphics.newImage("images/x.png")
 local image_o = love.graphics.newImage("images/o.png")
 local image_hand = love.graphics.newImage("images/hand.png")
 local image_win = love.graphics.newImage("images/victory.png")
-local image_info = love.graphics.newImage("images/info.png")
+local image_info = love.graphics.newImage("images/help.png")
 local image_menu = love.graphics.newImage("images/menu.png")
 local image_inter = love.graphics.newImage("images/inter.png")
 local image_back = love.graphics.newImage("images/back.png")
 local image_button = love.graphics.newImage("images/button.png")
+local image_long_button = love.graphics.newImage("images/long_button.png")
 local image_bot = love.graphics.newImage("images/robot.png")
 local image_human = love.graphics.newImage("images/cowboy.png")
-local image_about = love.graphics.newImage("images/scroll.png")
+local image_about = love.graphics.newImage("images/about.png")
 local image_exit = love.graphics.newImage("images/door.png")
-local image_move = love.graphics.newImage("images/move.png")
+local image_move = love.graphics.newImage("images/fly.png")
 local image_stop = love.graphics.newImage("images/stop.png")
 local image_sound = love.graphics.newImage("images/sound.png")
 local image_mute = love.graphics.newImage("images/mute.png")
@@ -165,13 +167,13 @@ local function resize()
         exit = {x = board.x + board.size / 2 - cell_size * 4.8, y = board.y + offset + cell_size * 7.5}
     }
 
-    local particles_colors = { {66/255, 173/255, 226/255}, {237/255, 76/255, 92/255}, {255/255, 135/255, 54/255}, {194/255, 143/255, 239/255} }
+    local particles_colors = { {177/255, 204/255, 51/255}, {146/255, 211/255, 245/255}, {241/255, 179/255, 28/255}, {234/255, 90/255, 71/255}, {179/255, 153/255, 200/255}, {252/255, 234/255, 43/255} }
     local particles_alpha = {0.3, 0.6}
     for p=1,#particles do
         particles[p].size = love.math.random( math.floor(cell_size/10), math.ceil(cell_size/5) )
         particles[p].x = love.math.random( 0, W - particles[p].size )
         particles[p].y = love.math.random( 0, H - particles[p].size )
-        local c = love.math.random( 1, 4 )
+        local c = love.math.random( 1, 6 )
         local a = love.math.random( 1, 2 )
         local pc = particles_colors[c]
         pc[4] = particles_alpha[a]
@@ -505,8 +507,8 @@ There is a small 3x3 field in each cell of the usual 3x3 playing field. You put 
 Idea: Ben Orlin blog author
 mathwithbaddrawings.com
 
-Images: Emojitwo
-emojitwo.github.io
+Images: OpenMoji
+openmoji.org
 
 The Programming Language Lua
 lua.org
@@ -531,8 +533,8 @@ avbezdolny.github.io]])
 Идея: Бен Орлин автор блога
 mathwithbaddrawings.com
 
-Изображения: Emojitwo
-emojitwo.github.io
+Изображения: OpenMoji
+openmoji.org
 
 Язык Программирования Lua
 lua.org
@@ -659,12 +661,12 @@ function love.update(dt)
         for p=1,#particles do
             particles[p].y = particles[p].y + particles[p].size * dt * 6
             if particles[p].y > love.graphics.getHeight() then
-                local particles_colors = { {66/255, 173/255, 226/255}, {237/255, 76/255, 92/255}, {255/255, 135/255, 54/255}, {194/255, 143/255, 239/255} }
+                local particles_colors = { {177/255, 204/255, 51/255}, {146/255, 211/255, 245/255}, {241/255, 179/255, 28/255}, {234/255, 90/255, 71/255}, {179/255, 153/255, 200/255}, {252/255, 234/255, 43/255} }
                 local particles_alpha = {0.3, 0.6}
                 particles[p].size = love.math.random( math.floor(cell_size/10), math.ceil(cell_size/5) )
                 particles[p].x = love.math.random( 0, love.graphics.getWidth() - particles[p].size )
                 particles[p].y = love.math.random( 0, -particles[p].size )
-                local c = love.math.random( 1, 4 )
+                local c = love.math.random( 1, 6 )
                 local a = love.math.random( 1, 2 )
                 local pc = particles_colors[c]
                 pc[4] = particles_alpha[a]
@@ -784,24 +786,27 @@ function love.draw()
     end
 
     -- КНОПКИ ОСНОВНЫЕ
-    if press_button == "info" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
+    if press_button == "info" then love.graphics.setColor(color_button_press) else love.graphics.setColor(1, 1, 1, 1) end
+    love.graphics.draw(image_button, coord.info.x, coord.info.y, 0, k_scale * 2, k_scale * 2)
+    if press_button == "menu" then love.graphics.setColor(color_button_press) else love.graphics.setColor(1, 1, 1, 1) end
+    love.graphics.draw(image_button, coord.menu.x, coord.menu.y, 0, k_scale * 2, k_scale * 2)
+    
+    love.graphics.setColor(1, 1, 1, 1)
     if not is_show_menu and not is_show_info then love.graphics.draw(image_info, coord.info.x, coord.info.y, 0, k_scale * 2, k_scale * 2)
     elseif is_show_menu then love.graphics.draw(image_inter, coord.info.x, coord.info.y, 0, k_scale * 2, k_scale * 2)
     elseif is_show_info then love.graphics.draw(image_back, coord.info.x, coord.info.y, 0, k_scale * 2, k_scale * 2) end
-
-    if press_button == "menu" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
     if not is_show_menu then love.graphics.draw(image_menu, coord.menu.x, coord.menu.y, 0, k_scale * 2, k_scale * 2) else love.graphics.draw(image_back, coord.menu.x, coord.menu.y, 0, k_scale * 2, k_scale * 2) end
 
     -- КНОПКИ МЕНЮ
     if is_show_menu then
-        if press_button == "bot" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
-        love.graphics.draw(image_button, coord.bot.x, coord.bot.y, 0, k_scale * 2, k_scale * 2)
-        if press_button == "human" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
-        love.graphics.draw(image_button, coord.human.x, coord.human.y, 0, k_scale * 2, k_scale * 2)
-        if press_button == "about" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
-        love.graphics.draw(image_button, coord.about.x, coord.about.y, 0, k_scale * 2, k_scale * 2)
-        if press_button == "exit" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
-        love.graphics.draw(image_button, coord.exit.x, coord.exit.y, 0, k_scale * 2, k_scale * 2)
+        if press_button == "bot" then love.graphics.setColor(color_button_press) else love.graphics.setColor(1, 1, 1, 1) end
+        love.graphics.draw(image_long_button, coord.bot.x, coord.bot.y, 0, k_scale * 2, k_scale * 2)
+        if press_button == "human" then love.graphics.setColor(color_button_press) else love.graphics.setColor(1, 1, 1, 1) end
+        love.graphics.draw(image_long_button, coord.human.x, coord.human.y, 0, k_scale * 2, k_scale * 2)
+        if press_button == "about" then love.graphics.setColor(color_button_press) else love.graphics.setColor(1, 1, 1, 1) end
+        love.graphics.draw(image_long_button, coord.about.x, coord.about.y, 0, k_scale * 2, k_scale * 2)
+        if press_button == "exit" then love.graphics.setColor(color_button_press) else love.graphics.setColor(1, 1, 1, 1) end
+        love.graphics.draw(image_long_button, coord.exit.x, coord.exit.y, 0, k_scale * 2, k_scale * 2)
 
         love.graphics.setColor(1, 1, 1, 1)
         love.graphics.draw(image_bot, coord.bot.x + cell_size * 0.25, coord.bot.y, 0, k_scale * 2, k_scale * 2)
@@ -816,10 +821,14 @@ function love.draw()
         love.graphics.printf(s("About game"), coord.about.x + cell_size, coord.about.y + cell_size * 0.5, cell_size * 8.5, "center")
         love.graphics.printf(s("Exit game"), coord.exit.x + cell_size, coord.exit.y + cell_size * 0.5, cell_size * 8.5, "center")
 
-        if press_button == "anim" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
+        if press_button == "anim" then love.graphics.setColor(color_button_press) else love.graphics.setColor(1, 1, 1, 1) end
+        love.graphics.draw(image_button, coord.p1.x, coord.p1.y, 0, k_scale * 2, k_scale * 2)
+        if press_button == "sound" then love.graphics.setColor(color_button_press) else love.graphics.setColor(1, 1, 1, 1) end
+        love.graphics.draw(image_button, coord.p2.x, coord.p2.y, 0, k_scale * 2, k_scale * 2)
+        
+        love.graphics.setColor(1, 1, 1, 1)
         if is_anim then love.graphics.draw(image_move, coord.p1.x, coord.p1.y, 0, k_scale * 2, k_scale * 2)
         else love.graphics.draw(image_stop, coord.p1.x, coord.p1.y, 0, k_scale * 2, k_scale * 2) end
-        if press_button == "sound" then love.graphics.setColor(color_bg) else love.graphics.setColor(1, 1, 1, 1) end
         if is_sound then love.graphics.draw(image_sound, coord.p2.x, coord.p2.y, 0, k_scale * 2, k_scale * 2)
         else love.graphics.draw(image_mute, coord.p2.x, coord.p2.y, 0, k_scale * 2, k_scale * 2) end
     end
