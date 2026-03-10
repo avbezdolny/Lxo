@@ -414,7 +414,6 @@ local function analyze(pass_player)
 end
 
 
----@diagnostic disable-next-line: lowercase-global
 function click_cell(row, col, i, j)  -- global для доступа из любого места кода
     if player == 2 and is_bot then  -- для хода бота
         press_cell = {0, 0, 0, 0}
@@ -1003,3 +1002,4 @@ function love.quit()
 	save_game()
     return false
 end
+
