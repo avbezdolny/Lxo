@@ -779,7 +779,7 @@ function love.draw()
                 love.graphics.draw(image_win, coord.h1.x, coord.h1.y - offset_anim, 0, k_scale * 2, k_scale * 2)
             end
             if player == 2 or player == 0 then
-                love.graphics.draw(image_win, coord.h2.x - cell_size * 2, coord.h2.y - offset_anim, 0, k_scale * 2, k_scale * 2)
+                love.graphics.draw(image_win, coord.h2.x, coord.h2.y - offset_anim, 0, -k_scale * 2, k_scale * 2)
             end
         end
     end
@@ -1002,4 +1002,3 @@ function love.quit()
 	save_game()
     return false
 end
-
