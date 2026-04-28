@@ -201,7 +201,7 @@ end
 local function human_analyze(human_matrix, human_big_matrix, human_click)
     local temp_matrix = deepcopy(human_matrix)
     local temp_big_matrix = deepcopy(human_big_matrix)
-    local row, col, i, j = human_click[1], human_click[2], human_click[3], human_click[4]  -- table.unpack() не работает в данном случае, функция появилась в lua 5.2, а в love2d 11.5 встроена версия lua 5.1
+    local row, col, i, j = human_click[1], human_click[2], human_click[3], human_click[4]
     temp_matrix[row][col][i][j] = 1
 
     if (temp_matrix[row][col][1][1] == temp_matrix[row][col][1][2] and temp_matrix[row][col][1][1] == temp_matrix[row][col][1][3] and temp_matrix[row][col][1][1] ~= 0)
@@ -300,7 +300,7 @@ local function bot_analyze(bot_matrix, bot_click)
     local temp_matrix = deepcopy(bot_matrix)
     local temp_big_matrix = deepcopy(big_matrix)
     local temp_select_big = {0, 0}
-    local row, col, i, j = bot_click[1], bot_click[2], bot_click[3], bot_click[4]  -- table.unpack() не работает в данном случае, функция появилась в lua 5.2, а в love2d 11.5 встроена версия lua 5.1
+    local row, col, i, j = bot_click[1], bot_click[2], bot_click[3], bot_click[4]
     temp_matrix[row][col][i][j] = -1
 
     if (temp_matrix[row][col][1][1] == temp_matrix[row][col][1][2] and temp_matrix[row][col][1][1] == temp_matrix[row][col][1][3] and temp_matrix[row][col][1][1] ~= 0)
@@ -650,6 +650,7 @@ function love.update(dt)
     if is_anim then
         -- hand
         offset_anim = offset_anim + cell_size * dt * vector_anim * 0.5
+        if math.abs(offset_anim) >= cell_size * 0.5 then offset_anim = 0 end  -- для исправления скачков анимации при паузах
         if offset_anim >= cell_size * 0.25 then
             vector_anim = -1
         elseif offset_anim <= 0 then
@@ -664,7 +665,7 @@ function love.update(dt)
                 local particles_alpha = {0.3, 0.6}
                 particles[p].size = love.math.random( math.floor(cell_size/10), math.ceil(cell_size/5) )
                 particles[p].x = love.math.random( 0, love.graphics.getWidth() - particles[p].size )
-                particles[p].y = love.math.random( 0, -particles[p].size )
+                particles[p].y = -particles[p].size
                 local c = love.math.random( 1, 6 )
                 local a = love.math.random( 1, 2 )
                 local pc = particles_colors[c]
